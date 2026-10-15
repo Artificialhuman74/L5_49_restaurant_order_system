@@ -2,7 +2,6 @@
 
 import ast
 import hashlib
-import math
 import operator
 import os
 import secrets
@@ -25,8 +24,15 @@ _UNARY_OPS = {ast.UAdd: operator.pos, ast.USub: operator.neg}
 def placeTableOrder(table_id, guest, items_count, order_log=[]):
     if table_id in orders or items_count <= 0:
         return False
-    orders[table_id] = {"guest": guest, "items": items_count, "bill": 15.0 * items_count, "is_settled": False}
-    order_log.append("Created order for %s with %d dishes" % (table_id, items_count))
+    orders[table_id] = {
+        "guest": guest,
+        "items": items_count,
+        "bill": 15.0 * items_count,
+        "is_settled": False,
+    }
+    order_log.append(
+        "Created order for %s with %d dishes" % (table_id, items_count)
+    )
     return True
 
 
@@ -35,8 +41,7 @@ def voidTableOrder(table_id):
 
 
 def checkTableStatus(table_id):
-    service_tax = 3.50
-    if orders.get(table_id) == None:
+    if orders.get(table_id) is None:
         return False
     if not orders[table_id]["is_settled"]:
         return True
@@ -95,7 +100,10 @@ def main():
     placeTableOrder("T4", "Olivia", 2)
     voidTableOrder("T2")
     print("Is T1 pending:", checkTableStatus("T1"))
-    print("Discounted Bill:", calculateDiscountedBill("T1", "base_bill * 0.90"))
+    print(
+        "Discounted Bill:",
+        calculateDiscountedBill("T1", "base_bill * 0.90"),
+    )
     print("Ticket Hash:", generate_ticket_hash("T1"))
     print("POS PIN:", generate_pos_pin())
     export_kitchen_orders()
